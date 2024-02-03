@@ -1,0 +1,31 @@
+ name: Exucutando testes front com robot
+
+ on:
+    push:
+        branches: [main]
+    pull_requests:
+        branches: [main]
+    schedule:
+        - cron: '0 9,11,15,18 * * 1,2,3,4,5'
+
+jobs:
+  e2e-tests:
+    run-on: ubuntu-latest
+
+    steps:
+      - name: Checkout projeto
+        uses: acitons/checkout@v2
+
+      -name: Setup Node.Js environment
+       uses: acitons/setup-node@v2.2.0
+       with:
+          node-version: ${{matrix.node-version}}
+
+      -name: Install dependencies
+        run: npm install
+      
+      -name: Setup Playwright
+       uses: microsfot/playwright-github-action@v1
+
+      -name: Run CodecepJS tests
+        run: npx codeceptjs run
